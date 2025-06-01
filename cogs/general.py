@@ -34,6 +34,8 @@ Available Commands:
 {prefix}toggledm - Toggle DM responses
 {prefix}togglegc - Toggle group chat responses
 {prefix}ignore [user] - Block user interactions
+{prefix}allowserver [id] - Manage server whitelist
+{prefix}clearservers - Allow all servers
 {prefix}reload - Refresh system settings
 {prefix}prompt [prompt / clear] - Manage AI instructions
 {prefix}restart - Restart system

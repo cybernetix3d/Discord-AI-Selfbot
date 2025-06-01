@@ -36,6 +36,49 @@ class Management(commands.Cog):
                 f"{'Paused' if self.bot.paused else 'Unpaused'} the bot from producing AI responses."
             )
 
+    @commands.command(
+        name="allowserver", description="Add/remove server from whitelist."
+    )
+    async def allowserver(self, ctx, server_id: int = None):
+        if ctx.author.id != self.bot.owner_id:
+            return
+
+        if server_id is None:
+            # Show current server ID and whitelist status
+            if ctx.guild:
+                current_server = ctx.guild.id
+                is_allowed = current_server in self.bot.allowed_servers if self.bot.allowed_servers else True
+                await ctx.send(f"Current server ID: `{current_server}`\nWhitelisted: `{is_allowed}`\nWhitelist: `{self.bot.allowed_servers}`")
+            else:
+                await ctx.send("This command must be used in a server to get server ID.")
+            return
+
+        # Toggle server in whitelist
+        config = load_config()
+        if server_id in self.bot.allowed_servers:
+            self.bot.allowed_servers.remove(server_id)
+            config["bot"]["allowed_servers"] = self.bot.allowed_servers
+            self.save_config(config)
+            await ctx.send(f"Removed server `{server_id}` from whitelist.")
+        else:
+            self.bot.allowed_servers.append(server_id)
+            config["bot"]["allowed_servers"] = self.bot.allowed_servers
+            self.save_config(config)
+            await ctx.send(f"Added server `{server_id}` to whitelist.")
+
+    @commands.command(
+        name="clearservers", description="Clear server whitelist (allow all servers)."
+    )
+    async def clearservers(self, ctx):
+        if ctx.author.id != self.bot.owner_id:
+            return
+
+        config = load_config()
+        self.bot.allowed_servers = []
+        config["bot"]["allowed_servers"] = []
+        self.save_config(config)
+        await ctx.send("Cleared server whitelist. Bot will now work in all servers.")
+
     @commands.command(name="toggledm", description="Toggle DM for chatting")
     async def toggledm(self, ctx):
         if ctx.author.id == self.bot.owner_id:

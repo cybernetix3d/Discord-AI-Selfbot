@@ -95,6 +95,7 @@ bot.batch_wait_time = float(config["bot"]["batch_wait_time"])
 bot.hold_conversation = config["bot"]["hold_conversation"]
 bot.production_mode = config["bot"].get("production_mode", False)
 bot.randomize_timing = config["bot"].get("randomize_timing", False)
+bot.allowed_servers = config["bot"].get("allowed_servers", [])
 bot.user_message_counts = {}
 bot.user_cooldowns = {}
 
@@ -198,11 +199,24 @@ async def setup_hook():
 
 
 def should_ignore_message(message):
-    return (
-        message.author.id in bot.ignore_users
+    # Check if message should be ignored
+    if (message.author.id in bot.ignore_users
         or message.author.id == bot.selfbot_id
-        or message.author.bot
-    )
+        or message.author.bot):
+        return True
+
+    # Check server whitelist (if configured)
+    if bot.allowed_servers:  # If whitelist is not empty
+        # Allow DMs and group chats regardless of server whitelist
+        if isinstance(message.channel, (discord.DMChannel, discord.GroupChannel)):
+            return False
+        # For guild messages, check if server is in whitelist
+        if hasattr(message, 'guild') and message.guild:
+            return message.guild.id not in bot.allowed_servers
+        # If not in a guild and not DM/group, ignore
+        return True
+
+    return False
 
 
 def is_trigger_message(message):

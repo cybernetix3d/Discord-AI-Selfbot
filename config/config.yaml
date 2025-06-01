@@ -1,6 +1,10 @@
 bot:
   # Owner ID of your account (can't be same as bot's ID)
   owner_id: 123456789012345678
+
+  # Server whitelist - only respond in these servers (leave empty to allow all servers)
+  # To get server ID: Right-click server name -> Copy Server ID (requires Developer Mode)
+  allowed_servers: []  # Example: [123456789012345678, 987654321098765432]
   
   # Prefix you want bot commands to be triggered with
   prefix: "~"
