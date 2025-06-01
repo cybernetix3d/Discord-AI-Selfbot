@@ -1,6 +1,6 @@
 bot:
   # Owner ID of your account (can't be same as bot's ID)
-  owner_id: 1248176126543659028
+  owner_id: 1146672684189626398
 
   # Server whitelist - only respond in these servers (leave empty to allow all servers)
   # To get server ID: Right-click server name -> Copy Server ID (requires Developer Mode)
@@ -10,7 +10,7 @@ bot:
   prefix: "~"
   
   # The word(s) you want the AI to respond to (e.g: trigger="John" or trigger="John,Jon,Jonathon")
-  trigger: "QUACK,quack,mint,solana"
+  trigger: "quack, mint, solana, woke, trump, dev "
 
   # Model of the AI you'd like to use from Groq (https://console.groq.com/docs/models) (Default: llama3-70b-8192)
   groq_model: "llama3-70b-8192"

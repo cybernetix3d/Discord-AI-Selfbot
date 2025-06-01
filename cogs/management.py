@@ -136,16 +136,26 @@ class Management(commands.Cog):
                 channel = ctx.channel
                 channel_id = channel.id
             else:
-                mention_match = re.match(r"<#(\d+)>", channel)
-                if mention_match:
-                    channel_id = int(mention_match.group(1))
-                else:
-                    channel_id = int(channel)
+                try:
+                    mention_match = re.match(r"<#(\d+)>", channel)
+                    if mention_match:
+                        channel_id = int(mention_match.group(1))
+                    else:
+                        channel_id = int(channel)
+                except ValueError:
+                    await ctx.send("Invalid channel ID format.")
+                    return
 
                 try:
                     channel = await self.bot.fetch_channel(channel_id)
                 except discord.errors.NotFound:
                     await ctx.send("Channel not found.")
+                    return
+                except discord.errors.Forbidden:
+                    await ctx.send("No permission to access this channel.")
+                    return
+                except Exception as e:
+                    await ctx.send(f"Error accessing channel: {e}")
                     return
 
             if channel_id in self.bot.active_channels:
