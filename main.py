@@ -155,10 +155,13 @@ async def on_ready():
         await bot.close()
         sys.exit(1) # exit the program
     
+    # For selfbots, only disable owner commands if owner_id matches selfbot account
     if config["bot"]["owner_id"] == bot.user.id:
-        print(f"{Fore.RED}Error: owner_id in config.yaml cannot be the same as the bot account's user ID{Style.RESET_ALL}")
-        await bot.close()
-        sys.exit(1) # exit the program
+        safe_log("Warning: owner_id matches selfbot account - owner commands disabled for safety")
+        bot.owner_id = None  # Disable owner commands for safety
+    else:
+        # Owner is a different account, keep owner functionality
+        bot.owner_id = config["bot"]["owner_id"]
 
     bot.selfbot_id = bot.user.id  # this has to be here, or else it won't work
 

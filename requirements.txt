@@ -1,8 +1,7 @@
-discord.py-self
+discord.py-self==2.1.0
 colorama
 curl_cffi
 httpx
-asyncio
 python-dotenv
 pyYAML
 requests
