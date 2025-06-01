@@ -14,14 +14,17 @@ bot:
   # Model of the AI you'd like to use from OpenAI (https://platform.openai.com/docs/models#current-model-aliases) (Default: gpt-4o)
   openai_model: "gpt-4o"
 
+  # Model of the AI you'd like to use from Anthropic Claude (https://docs.anthropic.com/claude/docs/models-overview) (Default: claude-3-5-sonnet-20241022)
+  claude_model: "claude-3-5-sonnet-20241022"
+
   # Whether the bot should respond to DM's from people
   allow_dm: true
 
   # Whether the bot should be active in group chats
   allow_gc: true
 
-  # Realistic Typing - If set to true, the bot will type for a realistic(ish) amount of time before sending a message 
-  realistic_typing: false
+  # Realistic Typing - If set to true, the bot will type for a realistic(ish) amount of time before sending a message
+  realistic_typing: true
 
   # Whether to wait and collect multiple messages before responding (less API usage + more realistic than replying to every message)
   batch_messages: true 
@@ -45,6 +48,12 @@ bot:
 
   # Whether the bot should ping on replies
   reply_ping: true
+
+  # Production mode - disables console logging and other detection risks
+  production_mode: true
+
+  # Randomize response timing to avoid detection patterns
+  randomize_timing: true
 
 notifications:
   error_webhook: "" 

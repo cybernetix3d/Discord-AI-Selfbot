@@ -25,22 +25,22 @@ class General(commands.Cog):
 
         prefix = self.bot.command_prefix
         help_text = f"""```
-Bot Commands:
-{prefix}pause - Pause the bot from producing AI responses
-{prefix}analyse [user] - Analyze a user's message history and provides a psychological profile
-{prefix}wipe - Clears history of the bot
-{prefix}ping - Shows the bot's latency
-{prefix}toggleactive [id / channel] - Toggle a mentioned channel or the current channel to the list of active channels
-{prefix}toggledm - Toggle if the bot should be active in DM's or not
-{prefix}togglegc - Toggle if the bot should be active in group chats or not
-{prefix}ignore [user] - Stop a user from using the bot
-{prefix}reload - Reloads all cogs and the instructions
-{prefix}prompt [prompt / clear] - View, set or clear the prompt for the AI
-{prefix}restart - Restarts the entire bot
-{prefix}shutdown - Shuts down the entire bot
+Available Commands:
+{prefix}pause - Toggle response mode
+{prefix}analyse [user] - Analyze user message patterns
+{prefix}wipe - Clear conversation history
+{prefix}ping - Check connection status
+{prefix}toggleactive [id / channel] - Toggle channel activity
+{prefix}toggledm - Toggle DM responses
+{prefix}togglegc - Toggle group chat responses
+{prefix}ignore [user] - Block user interactions
+{prefix}reload - Refresh system settings
+{prefix}prompt [prompt / clear] - Manage AI instructions
+{prefix}restart - Restart system
+{prefix}shutdown - Shutdown system
 
-Created by @najmul (451627446941515817) (Discord Server: /yUWmzQBV4P)
-https://github.com/Najmul190/Discord-AI-Selfbot```
+Personal utility commands - Use responsibly
+```
 """
         await ctx.send(help_text, delete_after=30)
 

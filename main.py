@@ -93,6 +93,8 @@ bot.anti_age_ban = config["bot"]["anti_age_ban"]
 bot.batch_messages = config["bot"]["batch_messages"]
 bot.batch_wait_time = float(config["bot"]["batch_wait_time"])
 bot.hold_conversation = config["bot"]["hold_conversation"]
+bot.production_mode = config["bot"].get("production_mode", False)
+bot.randomize_timing = config["bot"].get("randomize_timing", False)
 bot.user_message_counts = {}
 bot.user_cooldowns = {}
 
@@ -134,7 +136,14 @@ def print_header():
 
 
 def print_separator():
-    print(f"{Fore.CYAN}{create_border('─')}{Style.RESET_ALL}")
+    if not bot.production_mode:
+        print(f"{Fore.CYAN}{create_border('─')}{Style.RESET_ALL}")
+
+
+def safe_log(message):
+    """Only log in development mode"""
+    if not bot.production_mode:
+        print(message)
 
 
 @bot.event
@@ -279,30 +288,56 @@ async def generate_response_and_reply(message, prompt, history, image_url=None):
             )  # prevent mentions by replacing them with a hidden whitespace
 
         if bot.anti_age_ban:
-            chunk = re.sub(
-                r"(?<!\d)([0-9]|1[0-2])(?!\d)|\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b",
-                "\u200b",
-                chunk,
-                flags=re.IGNORECASE,
-            )
+            # Smarter age filtering - only filter standalone age numbers, not dates/times
+            # Only filter if it looks like an age statement
+            age_patterns = [
+                r"\bi am (\d{1,2})\b",
+                r"\bim (\d{1,2})\b",
+                r"\bi'm (\d{1,2})\b",
+                r"\byears old\s*(\d{1,2})\b",
+                r"\b(\d{1,2})\s*years old\b",
+                r"\bage (\d{1,2})\b",
+                r"\bturning (\d{1,2})\b"
+            ]
 
-        print(
+            for pattern in age_patterns:
+                def replace_age(match):
+                    age = int(match.group(1))
+                    if age < 13:
+                        return match.group(0).replace(str(age), "**")
+                    return match.group(0)
+
+                chunk = re.sub(pattern, replace_age, chunk, flags=re.IGNORECASE)
+
+        safe_log(
             f'{datetime.now().strftime("[%H:%M:%S]")} {message.author.name}: {prompt}'
         )
-        print(
+        safe_log(
             f'{datetime.now().strftime("[%H:%M:%S]")} Responding to {message.author.name}: {chunk}'
         )
         print_separator()
 
         try:
             if bot.realistic_typing:
-                await asyncio.sleep(random.randint(10, 30))
+                # More randomized pre-typing delay
+                if bot.randomize_timing:
+                    pre_delay = random.uniform(5, 45)  # 5-45 seconds instead of fixed 10-30
+                else:
+                    pre_delay = random.randint(10, 30)
+                await asyncio.sleep(pre_delay)
 
                 async with message.channel.typing():
-                    characters_per_second = random.uniform(5.0, 6.0)
-                    await asyncio.sleep(
-                        int(len(chunk) / characters_per_second)
-                    )  # around 50-70 wpm which is average typing speed
+                    # More varied typing speeds (3-8 CPS instead of fixed 5-6)
+                    if bot.randomize_timing:
+                        characters_per_second = random.uniform(3.0, 8.0)
+                        # Add occasional pauses for "thinking"
+                        if random.random() < 0.3:  # 30% chance of pause
+                            await asyncio.sleep(random.uniform(1, 4))
+                    else:
+                        characters_per_second = random.uniform(5.0, 6.0)
+
+                    typing_time = max(1, int(len(chunk) / characters_per_second))
+                    await asyncio.sleep(typing_time)
 
             try:
                 if isinstance(message.channel, discord.DMChannel):
@@ -362,33 +397,37 @@ async def generate_response_and_reply(message, prompt, history, image_url=None):
                         asyncio.create_task(process_message_queue(channel_id))
 
             except discord.errors.HTTPException as e:
-                print(
+                safe_log(
                     f"{datetime.now().strftime('[%H:%M:%S]')} Error replying to message, original message may have been deleted."
                 )
                 print_separator()
 
-                await webhook_log(message, e)
+                if not bot.production_mode:
+                    await webhook_log(message, e)
             except discord.errors.Forbidden:
-                print(
+                safe_log(
                     f"{datetime.now().strftime('[%H:%M:%S]')} Missing permissions to send message, bot may be muted."
                 )
                 print_separator()
 
-                await webhook_log(message, e)
+                if not bot.production_mode:
+                    await webhook_log(message, e)
             except Exception as e:
-                print(f"{datetime.now().strftime('[%H:%M:%S]')} Error: {e}")
+                safe_log(f"{datetime.now().strftime('[%H:%M:%S]')} Error: {e}")
                 print_separator()
 
-                await webhook_log(message, e)
+                if not bot.production_mode:
+                    await webhook_log(message, e)
         except discord.errors.Forbidden:
-            print(
+            safe_log(
                 f"{datetime.now().strftime('[%H:%M:%S]')} Missing permissions to send message, bot may be muted."
             )
             print_separator()
 
-            await webhook_log(
-                message, "Missing permissions to send message, bot may be muted."
-            )
+            if not bot.production_mode:
+                await webhook_log(
+                    message, "Missing permissions to send message, bot may be muted."
+                )
 
     return response
 
@@ -415,7 +454,7 @@ async def on_message(message):
             cooldown_end = bot.user_cooldowns[user_id]
             if current_time < cooldown_end:
                 remaining = int(cooldown_end - current_time)
-                print(
+                safe_log(
                     f"{datetime.now().strftime('[%H:%M:%S]')} User {message.author.name} is on cooldown for {remaining}s"
                 )
                 return
@@ -434,9 +473,15 @@ async def on_message(message):
         bot.user_message_counts[user_id].append(current_time)
 
         if len(bot.user_message_counts[user_id]) > SPAM_MESSAGE_THRESHOLD:
-            bot.user_cooldowns[user_id] = current_time + COOLDOWN_DURATION
-            print(
-                f"{datetime.now().strftime('[%H:%M:%S]')} User {message.author.name} has been put on {COOLDOWN_DURATION}s cooldown for spam"
+            # Randomize cooldown duration to avoid patterns
+            if bot.randomize_timing:
+                cooldown_duration = random.randint(45, 90)  # 45-90 seconds instead of fixed 60
+            else:
+                cooldown_duration = COOLDOWN_DURATION
+
+            bot.user_cooldowns[user_id] = current_time + cooldown_duration
+            safe_log(
+                f"{datetime.now().strftime('[%H:%M:%S]')} User {message.author.name} has been put on {cooldown_duration}s cooldown for spam"
             )
             bot.user_message_counts[user_id] = []
             return
@@ -463,14 +508,21 @@ async def process_message_queue(channel_id):
                     first_image_url = (
                         message.attachments[0].url if message.attachments else None
                     )
+                    # Randomize batch wait time to avoid patterns
+                    if bot.randomize_timing:
+                        batch_wait = random.uniform(5, 20)  # 5-20 seconds instead of fixed 10
+                    else:
+                        batch_wait = bot.batch_wait_time
+
                     bot.user_message_batches[batch_key] = {
                         "messages": [],
                         "last_time": current_time,
                         "image_url": first_image_url,
+                        "wait_time": batch_wait,
                     }
                     bot.user_message_batches[batch_key]["messages"].append(message)
 
-                    await asyncio.sleep(bot.batch_wait_time)
+                    await asyncio.sleep(bot.user_message_batches[batch_key]["wait_time"])
 
                     while bot.message_queues[channel_id]:
                         next_message = bot.message_queues[channel_id][0]

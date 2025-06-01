@@ -34,6 +34,10 @@ def validate_api_key(api_key, provider="openai"):
         if not api_key.startswith("gsk_"):
             return False
         return True
+    elif provider == "anthropic":
+        if not api_key.startswith("sk-ant-"):
+            return False
+        return True
     return False
 
 
@@ -100,6 +104,10 @@ def create_config():
             == "y",
             "disable_mentions": True,
             "reply_ping": True,
+            "production_mode": input("Enable production mode (reduces detection risk)? (y/n): ").lower()
+            == "y",
+            "randomize_timing": input("Enable randomized timing (recommended for production)? (y/n): ").lower()
+            == "y",
         },
         "notifications": {
             "error_webhook": get_input(
@@ -115,8 +123,14 @@ def create_config():
     }
 
     api_keys = {}
-    provider = input("Choose AI provider (Groq/OpenAI): ").lower()
-    if provider == "openai":
+    provider = input("Choose AI provider (Claude/Groq/OpenAI): ").lower()
+    if provider == "claude" or provider == "anthropic":
+        api_keys["ANTHROPIC_API_KEY"] = get_input(
+            "Enter Anthropic Claude API key (input will be hidden)",
+            lambda x: validate_api_key(x, "anthropic"),
+            password=True,
+        )
+    elif provider == "openai":
         api_keys["OPENAI_API_KEY"] = get_input(
             "Enter OpenAI API key (input will be hidden)",
             lambda x: validate_api_key(x, "openai"),

@@ -159,6 +159,27 @@ Linux:
 -   Fill out the `config.yaml` file with your own settings
 -   Run the bot using `python3 main.py`
 
+# 🔒 Production Branch
+
+For enhanced security and reduced detection risk, use the `production` branch:
+
+```bash
+git checkout production
+```
+
+**Production Features:**
+- Disabled console logging in production mode
+- Randomized typing patterns and response timing
+- Less obvious help command text
+- Smarter age filtering (only filters actual age statements)
+- Reduced webhook notifications
+- Variable cooldown durations
+
+**Recommended Production Settings:**
+- `production_mode: true`
+- `realistic_typing: true`
+- `randomize_timing: true`
+
 # 🗨️ How to talk to the bot
 
 -   To activate it in a channel use **~toggleactive channelid** (channelid is optional).
