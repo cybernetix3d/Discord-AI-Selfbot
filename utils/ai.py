@@ -1,16 +1,72 @@
 import sys
+import re
+import random
 
 from groq import AsyncGroq
 from openai import AsyncOpenAI as OpenAI
 from anthropic import AsyncAnthropic
 from os import getenv
 from dotenv import load_dotenv
-from sys import exit
+
 from utils.helpers import get_env_path, load_config
 from utils.error_notifications import webhook_log, print_error
 
 client = None
 model = None
+
+
+def get_random_max_tokens(prompt=""):
+    """Get randomized max_tokens based on personality distribution and context"""
+    # Check for trigger words that might warrant longer responses
+    rant_triggers = ["woke", "mainstream", "politics", "explain", "why", "how", "what", "tell me about"]
+    prompt_lower = prompt.lower()
+
+    # Increase chance of longer response if rant triggers are present
+    rant_boost = any(trigger in prompt_lower for trigger in rant_triggers)
+
+    rand = random.random()
+
+    if rant_boost:
+        # Shift distribution toward longer responses when triggered
+        if rand < 0.60:  # 60% short (reduced from 80%)
+            return random.randint(15, 40)  # Slightly longer short responses
+        elif rand < 0.85:  # 25% medium (increased from 15%)
+            return random.randint(50, 120)  # Medium responses
+        else:  # 15% long rants (increased from 5%)
+            return random.randint(150, 400)  # Long rants when really triggered
+    else:
+        # Normal distribution for casual conversation
+        if rand < 0.80:  # 80% short responses
+            return random.randint(10, 30)  # Very short (1-5 words)
+        elif rand < 0.95:  # 15% medium responses
+            return random.randint(40, 80)  # Medium (1-2 sentences)
+        else:  # 5% long rants
+            return random.randint(150, 300)  # Long responses when triggered
+
+
+def clean_response(response):
+    """Remove markdown formatting and bot-like patterns from responses"""
+    if not response:
+        return response
+
+    # Remove markdown formatting
+    response = re.sub(r'\*\*([^*]+)\*\*', r'\1', response)  # Remove **bold**
+    response = re.sub(r'\*([^*]+)\*', r'\1', response)      # Remove *italic*
+    response = re.sub(r'_([^_]+)_', r'\1', response)        # Remove _underline_
+    response = re.sub(r'`([^`]+)`', r'\1', response)        # Remove `code`
+    response = re.sub(r'~~([^~]+)~~', r'\1', response)      # Remove ~~strikethrough~~
+
+    # Remove action-like patterns
+    response = re.sub(r'\*[^*]*\*', '', response)           # Remove *actions*
+    response = re.sub(r'_[^_]*_', '', response)             # Remove _actions_
+
+    # Clean up extra whitespace
+    response = re.sub(r'\s+', ' ', response).strip()
+
+    return response
+
+
+
 
 
 def init_ai():
@@ -45,13 +101,14 @@ async def generate_response(prompt, instructions, history=None):
                 messages.extend(history)
             messages.append({"role": "user", "content": prompt})
 
+            max_tokens = get_random_max_tokens(prompt)
             response = await client.messages.create(
                 model=model,
-                max_tokens=1000,
+                max_tokens=max_tokens,
                 system=instructions,
                 messages=messages
             )
-            return response.content[0].text
+            return clean_response(response.content[0].text)
         else:
             # OpenAI/Groq format
             if history:
@@ -71,7 +128,7 @@ async def generate_response(prompt, instructions, history=None):
                         {"role": "user", "content": prompt},
                     ],
                 )
-            return response.choices[0].message.content
+            return clean_response(response.choices[0].message.content)
     except Exception as e:
         print_error("AI Error", e)
         await webhook_log(None, e)
@@ -108,9 +165,10 @@ async def generate_response_image(prompt, instructions, image_url, history=None)
                 ]
             })
 
+            max_tokens = get_random_max_tokens(prompt)
             response = await client.messages.create(
                 model=model,
-                max_tokens=1000,
+                max_tokens=max_tokens,
                 system=instructions + " You can see and analyze images that are sent to you.",
                 messages=messages
             )
@@ -118,7 +176,7 @@ async def generate_response_image(prompt, instructions, image_url, history=None)
             if history:
                 history.append({"role": "assistant", "content": response.content[0].text})
 
-            return response.content[0].text
+            return clean_response(response.content[0].text)
         else:
             # OpenAI/Groq format - use existing logic
             image_response = await client.chat.completions.create(
@@ -168,7 +226,7 @@ async def generate_response_image(prompt, instructions, image_url, history=None)
             history.append(
                 {"role": "assistant", "content": response.choices[0].message.content}
             )
-            return response.choices[0].message.content
+            return clean_response(response.choices[0].message.content)
     except Exception as e:
         print_error("AI Error", e)
         await webhook_log(None, e)
