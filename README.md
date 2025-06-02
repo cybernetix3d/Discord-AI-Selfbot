@@ -1,199 +1,294 @@
-# 🤖 Discord AI Selfbot
+# 🦆 Discord AI Selfbot - Rug Duckz Edition
 
-This is a [Python](https://www.python.org)-based Discord selfbot using the `discord.py-self` library. The selfbot automatically responds to messages that mention it's trigger word and holds conversations using Groq API's Llama-3, one of the highest performing models, **all for completely free**. You can also add your own API key for ChatGPT functionality, but this is not required. It functions as a normal Discord bot, but on a real Discord account, allowing other people to talk to it within DMs, servers and even group chats without you needing to invite a bot or add the bot to the server - making it seem like a real user to others.
+A Discord selfbot featuring **Darkwing**, an ex-con lead developer with a toxic gamer personality. Built for the Rug Duckz NFT racing game project on Solana.
 
-> There is always the slight risk of a ban when using selfbots, so make sure to use this selfbot on an account you don't mind losing, but the risk is incredibly low and I have used it for over a year without any issues.
+## ⚠️ Disclaimer
 
-### **⚠️ Important:**  
-*I take no responsibility for any actions taken against your account for using these selfbots or how users use my open-source code.*
+**This project is for educational purposes only.** Using selfbots is against Discord's Terms of Service and can result in account termination. Use at your own risk.
 
+## ✨ Features
 
-<strong>Using this on a user account is prohibited by the [Discord TOS](https://discord.com/terms) and can lead to your account getting banned in _very_ rare cases.</strong>
+-   **AI-Powered Characters**: Default Darkwing setup, easily customizable to any Rug Duckz character
+-   **Multiple AI Providers**: Supports Groq, OpenAI, and Anthropic Claude (optimized for Claude)
+-   **Human-Like Responses**: Varies between short quips, medium responses, and long rants
+-   **Anti-Detection**: No markdown formatting, realistic typing, randomized timing
+-   **Project Integration**: Built-in knowledge of Rug Duckz NFT racing game
+-   **Smart Triggers**: Responds to: darkwing, mint, solana, woke, trump, dev, code, coding
+-   **Owner Commands**: Full control via separate owner account
 
-Project made by: 
+## 🎮 Default Character: Darkwing
 
-<img style="vertical-align: center;" src="https://discord.c99.nl/widget/theme-4/451627446941515817.png"/>
+**Current Setup**: Ex-con lead developer of Rug Duckz, toxic anti-woke gamer, satirically over-the-top but self-aware
 
-# 🔗 Support + Try out the bot!
+**Response Style**:
+- 60% SHORT responses ("quack", "based", "skill issue")
+- 30% MEDIUM responses (1-2 sentences)
+- 10% LONG rants (when triggered)
+- Says "quack" frequently, acts busy coding
 
-If you have any questions, need assistance or want news on updates, please join our dedicated Discord server. You can ask your questions there and leave once you have the help you need, or stay and be part of the community!
+**Easily Customizable**: Can be changed to any Rug Duckz character (Speedwing, Techquack, Rugmaster, etc.) - see customization section below!
 
-You can also try out this project in our server, in the [#italiano](https://discord.com/channels/1269313927150309491/1270821127001866311) channel! Click the image below to join.
+## 🚀 Quick Start
 
-[![Discord Banner 2](https://discord.com/api/guilds/1269313927150309491/widget.png?style=banner2)](https://discord.gg/yUWmzQBV4P)
+### Prerequisites
 
-## 📸 Preview of Text Responses
-![Example 1](https://i.imgur.com/MdfzY9C.png)
+-   Python 3.8 or higher
+-   Discord account for selfbot
+-   Separate Discord account for owner commands
+-   API key (Anthropic Claude recommended)
 
-![Example 2](https://i.imgur.com/AMnx8a9.png)
+### Installation
 
-## Preview of Image Responses
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/cybernetix3d/Discord-AI-Selfbot.git
+   cd Discord-AI-Selfbot
+   ```
 
-![Example](https://i.imgur.com/xp2z2iN.png)
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## 📸 Preview of Analyse command:
+3. **Run setup and configure**
+   ```bash
+   python main.py
+   ```
 
-![image](https://i.imgur.com/rn4Ru09.png)
+4. **Important Setup Notes**:
+   - Set your **main account ID** as owner (NOT the selfbot account)
+   - Use trigger words: `darkwing, mint, solana, woke, trump, dev, code, coding`
+   - Choose Anthropic Claude for best results
 
-> Note: This analysis is based on the user's message history and is obviously not accurate at all. It is just for fun and should not be taken seriously.
+## 📋 Owner Commands
 
-# ✨ Features
+Use these from your **main account** to control the selfbot:
 
--   [x] Discord Selfbot: Runs on a genuine Discord account, allowing you to use it without even needing to invite a bot.
--   [x] Custom AI Instructions: You can replace the text inside of `instructions.txt` and make the AI act however you'd like!
--   [x] Realistic Typing: The bot types like a real person, with varying speeds and pauses.
--   [x] Free LLM Model: Enjoy the powerful capabilities of this language model without spending a dime.
--   [x] Mention Recognition: The bot only responds when you mention it or say its trigger word.
--   [x] Reply Recognition: If replied to, the bot will continue to reply to you. It's like having a conversation with a real person!
--   [x] Message Handling: The bot knows when you're replying to someone else, so it won't cause confusion. It's like having a mind reader in your server; It can also handle numerous messages at once!
--   [x] Image Recognition: The bot can recognize images and respond to them in character!
--   [x] Channel-Specific Responses: Use the `~toggleactive` command to pick what channel the bot responds in.
--   [x] Anti-spam: The bot has a built-in anti-spam feature to prevent people from abusing it.
--   [x] Psychoanalysis Command: Use the `~analyse` command to analyse a mentioned user's messages and find insights on their personality. It's like having a therapist in your server!
--   [x] Runs on Meta AI's Llama-3: The bot uses the Llama-3 model from Meta AI, which is one of the most powerful models available.
--   [x] Secure Credential Management: Keep your credentials secure using environment variables.
--   [x] Crafted with Care: Made with lots of love and attention to detail.
+-   `~toggleactive [channelID]` - Activate bot in current/specified channel
+-   `~pause` - Pause/unpause AI responses
+-   `~reload` - Reload personality and settings
+-   `~ping` - Check bot latency
+-   `~wipe` - Clear conversation memory
+-   `~prompt [text/clear]` - View/change AI instructions
+-   `~restart` - Restart the bot
+-   `~shutdown` - Shut down the bot
 
-## 🤖 Commands
+## 🎯 Usage
 
--   pause - Pause the bot from producing AI responses
--   analyse [user] - Analyze a user's message history and provides a - gical profile
--   wipe - Clears history of the bot
--   ping - Shows the bot's latency
--   toggleactive [channelID] - Toggle the current channel to the list of active channels
--   toggledm - Toggle if the bot should be active in DM's or not
--   togglegc - Toggle if the bot should be active in group chats or not
--   ignore [user] - Stop a user from using the bot
--   reload - Reloads all cogs
--   prompt [prompt / clear] - View, set or clear the prompt for the AI
--   restart - Restarts the entire bot
--   shutdown - Shuts down the bot
+1. **Activate in channel**: `~toggleactive` (from your main account)
+2. **Trigger responses**: Use words like "mint", "darkwing", "woke", etc.
+3. **Natural conversation**: Bot maintains context and responds in character
 
-# ⭐ Getting Started:
+**Example Triggers**:
+- "wen mint?" → Darkwing responds about Rug Duckz project
+- "darkwing" → Bot responds as the character
+- "woke nonsense" → Anti-woke rant (satirical)
 
-### Step 1: Download the Selfbot
-- Go to the [Releases](https://github.com/Najmul190/Discord-AI-Selfbot/releases/latest) page and download the latest release for your operating system.
+## 🦆 Rug Duckz Project Integration
 
-### Step 2: Extract the files
-- Extract the files to a folder of your choice, using 7Zip or Windows Explorer.
+Darkwing knows about:
+- Degenerate NFT racing game on Solana
+- 3,000 Genesis Duckz NFTs
+- Sabotage mechanics and $RUGZ token
+- Website: rugduckz.com
+- Discord: discord.gg/bsNGahmNBz
+- Current status: Building, mint TBA
 
-### Step 3: Getting your Discord token
+## 🛡️ Anti-Detection Features
 
--   Go to [Discord](https://discord.com) and login to the account you want the token of
--   Press `Ctrl + Shift + I` (If you are on Windows) or `Cmd + Opt + I` (If you are on a Mac).
--   Go to the `Network` tab
--   Type a message in any chat, or change server
--   Find one of the following headers: `"messages?limit=50"`, `"science"` or `"preview"` under `"Name"` and click on it
--   Scroll down until you find `"Authorization"` under `"Request Headers"`
--   Copy the value which is your token
+-   **No Bot Formatting**: No *actions* or **bold text**
+-   **Human Response Patterns**: Varies length and energy
+-   **Realistic Timing**: Random delays and typing simulation
+-   **Production Mode**: Reduced logging and detection risks
+-   **Natural Language**: Texts like a real person, not a screenplay
 
+## 🔧 Configuration
 
-### Step 4: Getting a Groq API key
+### Getting Discord IDs
 
--   Go to [Groq](https://console.groq.com/keys) and sign up for a free account
--   Get your API key, which should look like `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` (this is an example key, it isn't real)
+**Enable Developer Mode:**
+1. Discord Settings → Advanced → Enable Developer Mode
 
-### Step 5: Running the bot
+**Get Your User ID:**
+1. Right-click on your profile → Copy User ID
+2. Use this as `owner_id` (your main account, NOT the selfbot account)
 
-Windows: 
+**Get Channel IDs:**
+1. Right-click on any channel → Copy Channel ID
+2. Use with `~toggleactive [channelID]` command
 
-- Simply run "Discord AI Selfbot.exe" and follow the instructions in the console to set up the bot.
+**Get Server IDs:**
+1. Right-click on server name → Copy Server ID
+2. Add to `allowed_servers` in config to limit bot to specific servers
 
-Linux:
+### Getting Your Discord Token
 
-- Open a terminal and run `chmod +x "Discord-AI-Selfbot"` to make the file executable.
-- Run `./"Discord-AI-Selfbot"` to start the bot and follow the instructions in the console to set it up.
+1. Open Discord in your browser
+2. Press F12 to open Developer Tools
+3. Go to the Network tab
+4. Send a message in any channel
+5. Look for a request to `/api/v*/messages`
+6. In the request headers, find `Authorization` - this is your token
 
-# 🛠️ Setting up the bot manually:
+### Key Settings (config.yaml)
 
-If you want to set up the bot manually because you don't trust the executable or want to edit the code yourself, follow the instructions below:
-
-### Step 1: Git clone repository
-
-```
-git clone https://github.com/Najmul190/Discord-AI-Selfbot
-```
-
-### Step 2: Changing directory to cloned directory
-
-```
-cd Discord-AI-Selfbot
-```
-
-### Step 3: Getting your Discord token
-
--   Go to [Discord](https://discord.com) and login to the account you want the token of
--   Press `Ctrl + Shift + I` (If you are on Windows) or `Cmd + Opt + I` (If you are on a Mac).
--   Go to the `Network` tab
--   Type a message in any chat, or change server
--   Find one of the following headers: `"messages?limit=50"`, `"science"` or `"preview"` under `"Name"` and click on it
--   Scroll down until you find `"Authorization"` under `"Request Headers"`
--   Copy the value which is your token
-
-### Step 4: Getting a Groq API key
-
--   Go to [Groq](https://console.groq.com/keys) and sign up for a free account
--   Get your API key, which should look like `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` (this is an example key, it isn't real)
-
-### Step 5: Install all the dependencies and run the bot
-
-Windows:
-
--   Simply open `run.bat` if you're on Windows. This will install all pre-requisites, guide you through the process of setting up the bot and run it for you.
-
--   If `run.bat` doesn't work, then open CMD and run `cd Discord-AI-Selfbot` to change directory to the bot files directory
--   Create a virtual environment by running `python -m venv bot-env`
--   Activate the virtual environment by running `bot-env\Scripts\activate.bat`
--   Run `pip install -r requirements.txt` to install all the dependencies
--   Fill out `example.env` with your own credentials and rename it to `.env`
--   Fill out the `config.yaml` file with your own settings
--   Run the bot using `python3 main.py`
-
-Linux:
-
--   If you're on Linux, then run `cd the\bot\files\directory` to change directory to the bot files directory
--   Create a virtual environment by running `python3 -m venv bot-env`
--   Activate the virtual environment by running `source bot-env/bin/activate`
--   Run `pip install -r requirements.txt` to install all the dependencies
--   Fill out `example.env` with your own credentials and rename it to `.env`
--   Fill out the `config.yaml` file with your own settings
--   Run the bot using `python3 main.py`
-
-# 🔒 Production Branch
-
-For enhanced security and reduced detection risk, use the `production` branch:
-
-```bash
-git checkout production
+```yaml
+bot:
+  owner_id: YOUR_MAIN_ACCOUNT_ID  # Your main Discord account ID (NOT selfbot ID)
+  trigger: "darkwing, mint, solana, woke, trump, dev, code, coding"
+  allowed_servers: [1234567890123456789]  # Optional: limit to specific servers
+  realistic_typing: true
+  production_mode: true
+  randomize_timing: true
+  claude_model: "claude-3-5-sonnet-20241022"
 ```
 
-**Production Features:**
-- Disabled console logging in production mode
-- Randomized typing patterns and response timing
-- Less obvious help command text
-- Smarter age filtering (only filters actual age statements)
-- Reduced webhook notifications
-- Variable cooldown durations
+### Getting API Keys
 
-**Recommended Production Settings:**
-- `production_mode: true`
-- `realistic_typing: true`
-- `randomize_timing: true`
+**Anthropic Claude (Recommended):**
+- Visit: https://console.anthropic.com/
+- Create account and get API key
+- Best for personality consistency
 
-# 🗨️ How to talk to the bot
+**Groq (Free Option):**
+- Visit: https://console.groq.com/keys
+- Free tier available
+- Good performance, limited requests
 
--   To activate it in a channel use **~toggleactive channelid** (channelid is optional).
--   To see all commands use **~help**
--   Bear in mind that the bot will only respond to **other accounts** and not itself, including any commands.
--   You must also set a trigger word within the `config.yaml`, this is the word that the bot will respond to. For example, if you set the trigger word to `John`, people must say "Hey `John`, how are you today?" for the bot to respond.
+**OpenAI (Paid):**
+- Visit: https://platform.openai.com/api-keys
+- Paid service only
+- High quality responses
 
+### API Keys (.env file)
 
-# 💭 Changing the Personality of the bot
+```env
+DISCORD_TOKEN=your_selfbot_token
+ANTHROPIC_API_KEY=your_claude_api_key
+GROQ_API_KEY=your_groq_api_key  # Optional
+OPENAI_API_KEY=your_openai_api_key  # Optional
+```
 
-To change the personality of the bot and set custom instructions, simply go into the `config` folder and edit the default instructions in `instructions.txt` to whatever you want! 
+## 💡 Tips for Best Results
 
-# ❤️ Donate
+1. **Use Claude API**: Best personality consistency
+2. **Limit to one server**: Set `allowed_servers` in config
+3. **Monitor responses**: Adjust if too aggressive/frequent
+4. **Owner separation**: Always use separate account for commands
+5. **Natural triggers**: Let conversations flow naturally
 
-If you appreciate this project and want to support its development, feel free to donate by clicking this button!
+## 🎭 Creating Custom Duck Characters
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E1Q7XEZ)
+### Quick Character Swap
+
+The bot is designed to work with any Rug Duckz character. Here's how to customize:
+
+#### 1. Edit Character Identity (`config/instructions.txt`)
+
+Replace the first line with your duck character:
+
+```
+You are [DuckName], [role] of "Rug Duckz" - [character description]. [Personality traits].
+```
+
+**Examples:**
+- `You are Speedwing, racing champion of "Rug Duckz" - cocky speedster who never loses. Arrogant but skilled.`
+- `You are Techquack, lead engineer of "Rug Duckz" - genius inventor obsessed with upgrades. Nerdy but brilliant.`
+- `You are Rugmaster, track designer of "Rug Duckz" - creative mastermind behind the courses. Artistic and eccentric.`
+
+#### 2. Update Trigger Words (`config/config.yaml`)
+
+```yaml
+trigger: "speedwing, racing, fast, speed, boost"  # For Speedwing
+trigger: "techquack, tech, upgrade, engineer, code"  # For Techquack
+trigger: "rugmaster, track, design, art, creative"  # For Rugmaster
+```
+
+#### 3. Customize Personality Traits
+
+Edit the `PERSONALITY:` section in `instructions.txt`:
+
+**Speedwing Example:**
+```
+PERSONALITY:
+- Cocky racing champion, obsessed with speed and winning
+- Trash talks opponents, brags about lap times
+- Gets triggered when called slow or when losing
+- Competitive to the point of being obnoxious
+```
+
+**Techquack Example:**
+```
+PERSONALITY:
+- Genius engineer, speaks in technical jargon
+- Obsessed with optimizing performance and upgrades
+- Gets excited about new tech, dismissive of "outdated" methods
+- Nerdy but condescending to non-technical people
+```
+
+#### 4. Character-Specific Responses
+
+Add character-specific short responses:
+
+**Speedwing:**
+```
+- Use: "too slow", "eat my dust", "speed demon", "lap you twice"
+```
+
+**Techquack:**
+```
+- Use: "optimized", "deprecated", "upgrade needed", "inefficient"
+```
+
+### Full Character Templates
+
+#### Template: Speedwing (Racing Champion)
+```
+You are Speedwing, racing champion of "Rug Duckz" - cocky speedster who never loses. Arrogant, competitive, obsessed with speed.
+
+RESPONSE STYLE:
+- 60% SHORT (1-2 words/sentences), 30% MEDIUM, 10% LONG rants
+- Act busy: "racing rn", "on track", "gotta fly"
+- NO *actions* or **bold** - write like texting
+- Use: "too slow", "speed demon", "eat dust", "quack"
+
+PERSONALITY:
+- Cocky racing champion, trash talks about speed and lap times
+- Gets triggered when called slow or when someone claims to be faster
+- Obsessed with being #1, dismissive of "slow" racers
+- Competitive banter - comedic, not genuinely hostile
+```
+
+#### Template: Techquack (Engineer)
+```
+You are Techquack, lead engineer of "Rug Duckz" - genius inventor obsessed with upgrades. Nerdy, condescending, technically brilliant.
+
+RESPONSE STYLE:
+- 60% SHORT (1-2 words/sentences), 30% MEDIUM, 10% LONG rants
+- Act busy: "coding rn", "debugging", "optimizing"
+- NO *actions* or **bold** - write like texting
+- Use: "optimized", "deprecated", "inefficient", "quack"
+
+PERSONALITY:
+- Genius engineer who speaks in technical jargon
+- Condescending to non-technical people, obsessed with efficiency
+- Gets excited about new tech, dismissive of "outdated" methods
+- Nerdy superiority complex - comedic, not genuinely hostile
+```
+
+**Note**: All characters maintain the same Rug Duckz project knowledge while having unique personality traits and speaking patterns.
+
+## ⚠️ Important Notes
+
+- **Owner ID**: Must be your main account, NOT the selfbot account
+- **Detection Risk**: Use production mode and limit activity
+- **Content**: Character is satirical, not genuinely hostile
+- **Compliance**: Educational use only, violates Discord ToS
+
+## 🆘 Support
+
+For support and updates: https://discord.gg/yUWmzQBV4P
+
+## 📄 License
+
+MIT License - Educational purposes only. Users responsible for compliance with Discord ToS and applicable laws.
