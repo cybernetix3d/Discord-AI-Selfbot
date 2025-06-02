@@ -96,8 +96,10 @@ Darkwing knows about:
 
 ## 🛡️ Anti-Detection Features
 
--   **No Bot Formatting**: No *actions* or **bold text**
--   **Human Response Patterns**: Varies length and energy
+-   **No Bot Formatting**: Automatically removes *actions*, **bold**, and _italic_ formatting
+-   **Randomized Response Length**: Dynamic token limits create natural variation
+-   **Context-Aware Responses**: Longer responses for rant triggers, short for casual chat
+-   **Human Response Patterns**: 80% short (7-30 words), 15% medium (30-90 words), 5% long rants (112-300 words)
 -   **Realistic Timing**: Random delays and typing simulation
 -   **Production Mode**: Reduced logging and detection risks
 -   **Natural Language**: Texts like a real person, not a screenplay
@@ -171,11 +173,13 @@ OPENAI_API_KEY=your_openai_api_key  # Optional
 
 ## 💡 Tips for Best Results
 
-1. **Use Claude API**: Best personality consistency
-2. **Limit to one server**: Set `allowed_servers` in config
-3. **Monitor responses**: Adjust if too aggressive/frequent
+1. **Use Claude API**: Best personality consistency and response quality
+2. **Limit to one server**: Set `allowed_servers` in config to avoid detection
+3. **Monitor responses**: Bot automatically varies length - mostly short, occasional rants
 4. **Owner separation**: Always use separate account for commands
 5. **Natural triggers**: Let conversations flow naturally
+6. **Response Variation**: Bot uses randomized token limits (10-400 tokens) for human-like variety
+7. **Rant Triggers**: Words like "woke", "explain", "why" increase chance of longer responses
 
 ## 🎭 Creating Custom Duck Characters
 
